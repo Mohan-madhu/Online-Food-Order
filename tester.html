@@ -1,0 +1,53 @@
+﻿<!doctype html>
+<html lang="en" ng-app="APP">
+<head>
+    <meta charset="utf-8" />
+    <title>af</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body>
+    <form ng-controller="uploader">
+        <input type="file" file-input="files" multiple />
+        <input type="button" ng-click="upload()" value="Upload File" />
+        <li ng-repeat="file in files">{{file.name}}</li>
+    </form>
+    <script>
+        var app = angular.module("APP", [])
+        app.directive('fileInput', ['$parse', function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, elm, attrs) {
+                    elm.bind('change', function () {
+                        $parse(attrs.fileInput)
+                            .assign(scope, elm[0].files)
+                        scope.$apply()
+                    })
+                }
+            }
+        }])
+        app.controller("uploader", ["$scope", "$http", function ($scope, $http) {
+            $scope.fileschanged = function (element) {
+                $scope.files = element.files
+                $scope.$apply();
+            }
+
+            $scope.upload = function () {
+                var fd = new FormData();
+                angular.forEach($scope.files, function (file) {
+                    fd.append('file', file)
+                })
+                $http.post("UploadHandler.ashx", fd,
+                    {
+                        transformRequest : angular.identity,
+                        headers: { 'Content-Type': undefined }
+                    })
+                    .success(function (d) {
+                        console.log(d)
+                    })
+            }
+
+
+        }])
+    </script>
+</body>
+</html>

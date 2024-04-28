@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+<body>
+    <div id="qrcode"></div>
+  
+
+    <script>
+        let qrCode;
+        function qr() {
+          
+            return new QRCode("qr-code", {
+              
+                
+            })
+        }
+
+        function make() {
+
+            var upiUrl = "upi://pay?pa=mohan326856@oksbi&pn=Vijay&cu=INR&am=12";
+            var encodedUpiUrl = encodeURIComponent(upiUrl);
+
+            var qrCodeApiUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodedUpiUrl;
+
+
+            console.log(encodedUpiUrl)
+            console.log(upiUrl)
+            console.log(qrCodeApiUrl)
+            if (qrCode == null) {
+                qrCode = qr();
+                console.log("1")
+            } else {
+                qrCode.makeCode('hii');
+            }
+        }
+
+        make();
+    </script>
+
+
+</body>
+</html>
